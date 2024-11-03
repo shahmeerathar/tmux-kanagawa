@@ -9,7 +9,7 @@ get_platform()
 {
   case $(uname -s) in
     Linux)
-      gpu=$(lspci -v | grep VGA | head -n 1 | awk '{print $5}')
+      gpu=$(glxinfo | grep -e OpenGL.renderer | awk '{print $4}')
       echo $gpu
       ;;
 
@@ -38,7 +38,8 @@ main()
 {
   # storing the refresh rate in the variable RATE, default is 5
   RATE=$(get_tmux_option "@kanagawa-refresh-rate" 5)
-  gpu_label=$(get_tmux_option "@kanagawa-gpu-usage-label" "GPU")
+  name=$(glxinfo | grep -e OpenGL.renderer | cut -d':' -f2 | sed -E 's/.*?(RTX|GTX|RX|R9|R7|R5|HD|Arc|UHD|Iris|HD Graphics) ([0-9]+[A-Za-z0-9]*).*/\1 \2/' | xargs)
+  gpu_label=$(get_tmux_option "@kanagawa-gpu-usage-label" "GPU ($name)")
   gpu_usage=$(get_gpu)
   echo "$gpu_label $gpu_usage"
   sleep $RATE
