@@ -40,3 +40,7 @@ normalize_percent_len() {
   let right_spaces=($diff_len)/2
   printf "%${left_spaces}s%s%${right_spaces}s\n" "" $1 ""
 }
+
+installed() {
+  command -v $1 &> /dev/null
+}
