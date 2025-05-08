@@ -23,7 +23,7 @@ interface_get() {
     case "$(uname -s)" in
     Linux)
       if type ip >/dev/null; then
-        name="$(ip -o route get 192.168.0.0 | awk '{print $5}')"
+        name="$(ip -o route get 192.168.0.0 | grep -oP '(?<=dev )\S+')"
       fi
       ;;
     Darwin)
