@@ -10,9 +10,9 @@ readonly DOWNLOAD=1
 # SIZE index are the multiple of the unit byte and value the internationally recommended unit symbol in sec
 readonly SIZE=(
   [1]='B/s'
-  [1024]='kB/s'
-  [1048576]='MB/s'
-  [1073741824]='GB/s'
+  [1024]='kiB/s'
+  [1048576]='MiB/s'
+  [1073741824]='GiB/s'
 )
 
 # interface_get try to automaticaly get the used interface if network_name is empty
