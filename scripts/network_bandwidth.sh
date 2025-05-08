@@ -84,8 +84,9 @@ bandwidth_to_unit() {
   done
 
   result="$(awk -v a="$1" -v b="$size" 'BEGIN { printf "%.1f\n", a / b }' </dev/null)"
-
-  echo "$result ${SIZE[$size]}"
+  result_with_unit="$result ${SIZE[$size]}"
+  padded_result=$(printf "%11s" "$result_with_unit")
+  echo "$padded_result"
 }
 
 main() {
