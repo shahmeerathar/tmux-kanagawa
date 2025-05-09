@@ -10,9 +10,9 @@ readonly DOWNLOAD=1
 # SIZE index are the multiple of the unit byte and value the internationally recommended unit symbol in sec
 readonly SIZE=(
   [1]='B/s'
-  [1024]='kB/s'
-  [1048576]='MB/s'
-  [1073741824]='GB/s'
+  [1024]='kiB/s'
+  [1048576]='MiB/s'
+  [1073741824]='GiB/s'
 )
 
 # interface_get try to automaticaly get the used interface if network_name is empty
@@ -23,7 +23,7 @@ interface_get() {
     case "$(uname -s)" in
     Linux)
       if type ip >/dev/null; then
-        name="$(ip -o route get 192.168.0.0 | awk '{print $5}')"
+        name="$(ip -o route get 192.168.0.0 | grep -oP '(?<=dev )\S+')"
       fi
       ;;
     Darwin)
@@ -83,12 +83,10 @@ bandwidth_to_unit() {
     size="$i"
   done
 
-  local result="0.00"
-  if (($1 != 0)); then
-    result="$(awk -v a="$1" -v b="$size" 'BEGIN { printf "%.2f\n", a / b }' </dev/null)"
-  fi
-
-  echo "$result ${SIZE[$size]}"
+  result="$(awk -v a="$1" -v b="$size" 'BEGIN { printf "%.1f\n", a / b }' </dev/null)"
+  result_with_unit="$result ${SIZE[$size]}"
+  padded_result=$(printf "%11s" "$result_with_unit")
+  echo "$padded_result"
 }
 
 main() {
